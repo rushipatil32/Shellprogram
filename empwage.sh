@@ -4,7 +4,11 @@ isPresent=1;
 randomcheck=$((RANDOM%2));
 if [ $isPresent -eq $randomcheck ];
 then
-    echo "Employee is Present";
+	empRatePerHr=20;
+	empHrs=8;
+	salary=$(($empRatePerHr*$empHrs));
+	echo $salary;
 else
-    echo "Employee is Abscent";
+	salary=0
+	echo $salary;
 fi
