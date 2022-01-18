@@ -1,26 +1,43 @@
-#!/bin/bash -x 
+#!/bin/bash -x
 
 isFullTime=1;
 isPartTime=2;
-totalsalary=0;
+totalSalary=0;
 empRatePerHrs=20;
-numWorkingDays=20;
-for (( day=1;day<=$numWorkingDays;day++ ))
-do
-   empCheck=$((RANDOM%3));
-   case $empCheck in
-   $isFullTime)
-      empHrs=8
-      ;;
-   $isPartTime)
-      empHrs=4
-      ;;
-   *)
-      empHrs=0
-      ;;
+maxWorkingDays=20;
+maxWorkingHrs=100;
+totalEmpHrs=0;
+totalWorkingDays=0;
+
+function getWorkingHrs(){
+	case $1 in
+      $isFullTime) 
+         empHrs=8
+         ;;
+      $isPartTime)
+         empHrs=4
+         ;;
+      *)
+         empHrs=0
+         ;;
    esac
-   salary=$(($empRatePerHrs*$empHrs));
-   totalSalary=$(($totalSalary+$salary));
+	echo $empHrs
+}
+
+function getEmpWagePerDay(){
+	echo $(($1*$empRatePerHrs))
+}
+while [[ $totalEmpHrs -lt $maxWorkingHrs && $totalWorkingDays -le $maxWorkingDays ]]
+do
+((totalWorkingDays++))
+	empCheck=$((RANDOM%3));
+	empHrs=$( getWorkingHrs $empCheck )
+	totalEmpHrs=$(($totalEmpHrs+$empHrs))
+	dailyWage[$totalWorkingDays]=$( getEmpWagePerDay $empHrs)
 done
-echo  $totalSalary
-echo  $empCheck
+
+totalSalary=$(($totalEmpHrs * $empRatePerHrs))
+echo $totalSalary
+echo ${dailyWage[@]}
+
+
